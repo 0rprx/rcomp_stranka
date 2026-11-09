@@ -1,0 +1,21 @@
+html {
+    scroll-behavior: smooth;
+}
+
+.submenu {
+    display: none;
+}
+
+.dropdown:hover .submenu,
+.dropdown:focus-within .submenu {
+    display: block;
+}
+
+.dropdown .sipka {
+    transition: transform 0.2s;
+}
+
+.dropdown:hover .sipka,
+.dropdown:focus-within .sipka {
+    transform: rotate(90deg);
+}

@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <!-- HEAD: nastavenia stránky, ktoré nie sú vidieť priamo na obrazovke.
+         charset UTF-8 = aby fungovala diakritika (č, ž, ô...),
+         viewport = aby sa stránka na mobile neukazovala zmenšená, ale prispôsobila sa šírke displeja. -->
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Internet a TV | R-COMP</title>
+
+    <!-- TAILWIND: knižnica, vďaka ktorej píšeme dizajn priamo do HTML cez triedy.
+         Napr. "bg-white" = biele pozadie, "px-4" = odsadenie zľava aj sprava, "text-sm" = menšie písmo.
+         Načíta sa z internetu, preto stránka potrebuje pripojenie. -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- NÁŠ CSS SÚBOR: tu sú veci, ktoré sa cez Tailwind triedy robia ťažko (rozbaľovacie menu). -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<!-- BODY: všetko, čo je vidieť.
+     id="zaciatok" = sem skočí odkaz "Hore" v pätičke.
+     flex flex-col + min-h-screen = stránka je vždy aspoň na výšku okna, takže pätička je stále dole.
+     pb-16 = miesto na spodku, aby modrá lišta prilepená dole nezakrývala pätičku. -->
+<body id="zaciatok" class="min-h-screen flex flex-col pb-16" style="background-color: #F5F6F6">
+
+<!-- HLAVIČKA: biely pruh úplne hore (logo, vyhľadávanie, košík).
+     max-w-6xl mx-auto = obsah má maximálnu šírku a je vycentrovaný v strede obrazovky.
+     flex + justify-between = tri časti sú v jednom riadku, logo vľavo, košík vpravo.
+     flex-wrap = keď je obrazovka úzka (mobil), časti môžu prejsť na ďalší riadok. -->
+<header class="bg-white border-b border-gray-200">
+    <div class="max-w-6xl mx-auto px-4 py-4 flex flex-wrap items-center justify-between gap-4">
+
+        <!-- LOGO: text R-COMP + slogan. Celé je to odkaz, ktorý vedie na hlavnú stránku. -->
+        <a href="index.html" class="flex items-center gap-3">
+            <span class="text-4xl font-extrabold tracking-tight text-sky-600">R-COMP</span>
+            <span class="border-l border-gray-300 pl-3 text-sm leading-tight text-gray-500">Počítače pre<br>celú rodinu</span>
+        </a>
+
+        <!-- VYHĽADÁVANIE: políčko na text a tlačidlo s ikonou lupy.
+             Zatiaľ nič nehľadá (na to by bol potrebný backend, napr. Django).
+             order-last + w-full = na mobile ide vyhľadávanie na samostatný riadok cez celú šírku,
+             sm:... = od šírky tabletu vyššie je späť v strede medzi logom a košíkom. -->
+        <form action="#" class="order-last flex w-full sm:order-none sm:w-auto sm:flex-1 sm:max-w-md">
+            <input type="search" name="search" placeholder="Hľadať..."
+                   class="w-full rounded-l-md border border-gray-300 px-3 py-2 text-sm focus:border-sky-600 focus:outline-none">
+            <button type="submit"
+                    class="rounded-r-md bg-sky-600 px-4 text-white hover:bg-sky-700">
+                <!-- ikona lupy (SVG = obrázok nakreslený priamo v kóde) -->
+                <svg class="size-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                    <path fill-rule="evenodd"
+                          d="M9 3.5a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11ZM2 9a7 7 0 1 1 12.452 4.391l3.328 3.329a.75.75 0 1 1-1.06 1.06l-3.329-3.328A7 7 0 0 1 2 9Z"
+                          clip-rule="evenodd"/>
+                </svg>
+            </button>
+        </form>
+
+        <!-- KOŠÍK: ikona košíka s číslom.
+             relative na odkaze + absolute na čísle = číslo vieme presne posunúť do pravého horného rohu ikony. -->
+        <a href="kosik.html" title="Zobraziť nákupný košík" class="relative text-gray-600 hover:text-sky-600">
+            <svg class="size-8" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"/>
+            </svg>
+            <span class="absolute -top-1 -right-2 rounded-full bg-sky-600 px-1.5 text-xs font-bold text-white">0</span>
+        </a>
+    </div>
+</header>
+
+<!-- MENU: tmavý pruh s odkazmi na podstránky.
+     Je to zoznam (ul), kde každá položka (li) je jeden odkaz.
+     flex = položky idú vedľa seba, nie pod seba; flex-wrap = na mobile sa zalomia do viacerých riadkov. -->
+<nav class="bg-gray-800">
+    <ul class="max-w-6xl mx-auto px-4 flex flex-wrap">
+        <li><a href="servis.html" class="block px-4 py-3 text-sm font-semibold text-white hover:bg-gray-700">Servis</a></li>
+
+        <!-- POLOŽKA S PODMENU: trieda "dropdown" na li a trieda "submenu" na vnorenom zozname.
+             Podmenu je normálne skryté. Keď prejdeš myšou nad položku, ukáže sa (pravidlá sú v style.css).
+             relative na li + absolute top-full na podmenu = podmenu sa zobrazí presne pod položkou
+             a "pláva" nad obsahom stránky, takže nič neposúva. Odkazy so znakom # skočia na časť podstránky s daným id. -->
+        <li class="dropdown relative">
+            <a href="pre-firmy.html" class="flex items-center gap-1 px-4 py-3 text-sm font-semibold text-white hover:bg-gray-700">
+                Pre firmy
+                <!-- šípka; trieda "sipka" sa pri otvorení podmenu otočí (style.css) -->
+                <svg class="sipka size-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                    <path fill-rule="evenodd"
+                          d="M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L11.94 10 8.22 6.28a.75.75 0 0 1 0-1.06Z"
+                          clip-rule="evenodd"/>
+                </svg>
+            </a>
+            <ul class="submenu absolute left-0 top-full z-10 w-56 rounded-b-md bg-white py-1 shadow-lg ring-1 ring-black/5">
+                <li><a href="pre-firmy.html#ekasa" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-sky-600">eKasa</a></li>
+                <li><a href="pre-firmy.html#tlac" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-sky-600">tlačové riešenia</a></li>
+                <li><a href="pre-firmy.html#outsourcing" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-sky-600">outsourcing</a></li>
+                <li><a href="pre-firmy.html#siete" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-sky-600">sieťové riešenia</a></li>
+                <li><a href="pre-firmy.html#zabezpecenie" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-sky-600">zabezpečovacie systémy</a></li>
+            </ul>
+        </li>
+
+        <li><a href="pre-skoly.html" class="block px-4 py-3 text-sm font-semibold text-white hover:bg-gray-700">Pre školy</a></li>
+        <li><a href="internet-a-tv.html" class="block px-4 py-3 text-sm font-semibold text-white hover:bg-gray-700">Internet a TV</a></li>
+        <li><a href="pomoc.html" class="block px-4 py-3 text-sm font-semibold text-white hover:bg-gray-700">Pomoc</a></li>
+        <li><a href="kontakty.html" class="block px-4 py-3 text-sm font-semibold text-white hover:bg-gray-700">Kontakty</a></li>
+
+        <!-- druhá položka s podmenu, funguje rovnako ako "Pre firmy" -->
+        <li class="dropdown relative">
+            <a href="obchod.html" class="flex items-center gap-1 px-4 py-3 text-sm font-semibold text-white hover:bg-gray-700">
+                Tovar na predajni
+                <svg class="sipka size-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                    <path fill-rule="evenodd"
+                          d="M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L11.94 10 8.22 6.28a.75.75 0 0 1 0-1.06Z"
+                          clip-rule="evenodd"/>
+                </svg>
+            </a>
+            <ul class="submenu absolute left-0 top-full z-10 w-56 rounded-b-md bg-white py-1 shadow-lg ring-1 ring-black/5">
+                <li><a href="obchod.html#notebooky" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-sky-600">notebooky</a></li>
+                <li><a href="obchod.html#pocitace" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-sky-600">počítače</a></li>
+                <li><a href="obchod.html#monitory" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-sky-600">monitory</a></li>
+                <li><a href="obchod.html#tlaciarne" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-sky-600">tlačiarne</a></li>
+                <li><a href="obchod.html#ekasa" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-sky-600">eKasa</a></li>
+            </ul>
+        </li>
+
+        <!-- E-SHOP: zvýraznené modrou farbou.
+             ml-auto = automatický okraj zľava, ktorý odtlačí položku úplne doprava.
+             target="_blank" = odkaz sa otvorí v novej karte, lebo vedie na inú stránku. -->
+        <li class="ml-auto">
+            <a href="https://r-comp.ekatalog.biz/" target="_blank"
+               class="block bg-sky-600 px-5 py-3 text-sm font-semibold text-white hover:bg-sky-700">e-shop</a>
+        </li>
+    </ul>
+</nav>
+
+<!-- HLAVNÝ OBSAH stránky Internet a TV -->
+<main class="flex-1">
+
+    <!-- ÚVODNÝ PÁS S FOTKOU (fotka na pozadí + tmavá vrstva + text) -->
+    <section class="relative overflow-hidden">
+        <img src="https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?auto=format&fit=crop&w=1600&h=600&q=80"
+             alt="" class="absolute inset-0 h-full w-full object-cover">
+        <div class="absolute inset-0 bg-slate-900/70"></div>
+        <div class="relative max-w-6xl mx-auto px-4 py-16">
+            <p class="text-sm font-semibold uppercase tracking-wide text-sky-400">Internet a TV</p>
+            <h1 class="mt-1 text-4xl font-bold text-white">Internet a televízia</h1>
+            <p class="mt-3 max-w-2xl text-slate-200">Na predajni vám poradíme s pripojením na internet a s televíziou Imavízia.</p>
+        </div>
+    </section>
+
+    <!-- DVE KARTY VEDĽA SEBA: internet a televízia.
+         md:grid-cols-2 = od tabletu dva stĺpce, na mobile pod sebou. -->
+    <section class="max-w-6xl mx-auto w-full px-4 py-10">
+        <div class="grid gap-6 md:grid-cols-2">
+            <div class="overflow-hidden rounded-lg bg-white shadow-sm ring-1 ring-black/5">
+                <img src="https://images.unsplash.com/photo-1606904825846-647eb07f5be2?auto=format&fit=crop&w=900&h=500&q=80"
+                     alt="Wi-Fi router" class="h-56 w-full object-cover">
+                <div class="p-6">
+                    <h2 class="text-2xl font-bold text-gray-900">Internet</h2>
+                    <p class="mt-2 text-gray-600">Pripojenie na internet pre domácnosti aj firmy. Pomôžeme s výberom, zapojením routera aj nastavením Wi-Fi.</p>
+                </div>
+            </div>
+            <div class="overflow-hidden rounded-lg bg-white shadow-sm ring-1 ring-black/5">
+                <img src="https://images.unsplash.com/photo-1522869635100-9f4c5e86aa37?auto=format&fit=crop&w=900&h=500&q=80"
+                     alt="Televízor s ovládačom" class="h-56 w-full object-cover">
+                <div class="p-6">
+                    <h2 class="text-2xl font-bold text-gray-900">Televízia Imavízia</h2>
+                    <p class="mt-2 text-gray-600">Televízia pre celú rodinu. Na predajni sa dozviete všetko o ponuke a možnostiach pripojenia.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- HLÁSENIE PORÚCH: červený box (bg-red-50 = veľmi svetločervená, border-red-200 = okraj),
+         aby bolo hneď vidieť, kam volať pri poruche. -->
+    <section class="max-w-6xl mx-auto w-full px-4 pb-10">
+        <div class="rounded-lg border border-red-200 bg-red-50 p-6">
+            <h2 class="text-xl font-bold text-red-800">Nefunguje vám internet alebo TV?</h2>
+            <p class="mt-1 text-red-700">Poruchu nahláste na hotline IMAFEX:</p>
+            <div class="mt-4 flex flex-wrap gap-3">
+                <a href="tel:+421443240000" class="rounded-md bg-red-600 px-4 py-2 font-semibold text-white hover:bg-red-700">Internet: +421 44 3240 000</a>
+                <a href="tel:+421443240999" class="rounded-md bg-red-600 px-4 py-2 font-semibold text-white hover:bg-red-700">Imavízia TV: +421 44 3240 999</a>
+            </div>
+        </div>
+    </section>
+</main>
+
+<!-- PÄTIČKA: tmavá časť na konci každej stránky.
+     Skladá sa z troch pásov: modrý pás s novinkami, 4 stĺpce s informáciami a spodný riadok s copyrightom. -->
+<footer class="bg-slate-900 text-slate-300">
+
+    <!-- NOVINKY NA E-MAIL: modrý pás s políčkom na e-mail.
+         id="novinky" = sem skočí odkaz "novinky na e-mail" zo spodnej lišty.
+         type="email" = prehliadač sám skontroluje, či je v políčku zavináč.
+         Formulár zatiaľ nič neodosiela, na to by bol potrebný backend. -->
+    <div id="novinky" class="bg-sky-600">
+        <div class="max-w-6xl mx-auto px-4 py-6 flex flex-wrap items-center justify-between gap-4">
+            <div>
+                <h3 class="text-lg font-bold text-white">Novinky na e-mail</h3>
+                <p class="text-sm text-sky-100">Akcie a nový tovar sa dozviete ako prví.</p>
+            </div>
+            <form action="#" class="flex w-full sm:w-auto">
+                <input type="email" placeholder="vas@email.sk"
+                       class="w-full rounded-l-md px-3 py-2 text-sm text-gray-900 focus:outline-none sm:w-72">
+                <button type="submit" class="rounded-r-md bg-slate-900 px-4 text-sm font-semibold text-white hover:bg-slate-800">Odoberať</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- 4 STĹPCE: grid = mriežka.
+         Na mobile 1 stĺpec (všetko pod sebou), sm: = od tabletu 2 stĺpce, lg: = na počítači 4 stĺpce vedľa seba. -->
+    <div class="max-w-6xl mx-auto px-4 py-12 grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
+
+        <!-- 1. stĺpec: logo a krátky popis firmy -->
+        <div>
+            <span class="text-3xl font-extrabold tracking-tight text-white">R-COMP</span>
+            <p class="mt-3 text-sm leading-relaxed text-slate-400">
+                Predajňa výpočtovej techniky v Ružomberku. Počítače, notebooky, tlačiarne a servis pre domácnosti aj firmy.
+            </p>
+        </div>
+
+        <!-- 2. stĺpec: kontakt s ikonkami.
+             Každý riadok je flex, takže ikona je vľavo a text vedľa nej.
+             tel: a mailto: = na mobile sa po kliknutí rovno vytočí číslo alebo otvorí e-mail. -->
+        <div>
+            <h3 class="mb-4 text-sm font-semibold uppercase tracking-wider text-white">Kontakt</h3>
+            <ul class="space-y-3 text-sm">
+                <li class="flex gap-3">
+                    <svg class="size-5 shrink-0 text-sky-500" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z"/>
+                    </svg>
+                    <span>Poľná 58<br>034 01 Ružomberok</span>
+                </li>
+                <li class="flex gap-3">
+                    <svg class="size-5 shrink-0 text-sky-500" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25Z"/>
+                    </svg>
+                    <a href="tel:+421905535251" class="hover:text-white">+421 905 53 52 51</a>
+                </li>
+                <li class="flex gap-3">
+                    <svg class="size-5 shrink-0 text-sky-500" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"/>
+                    </svg>
+                    <a href="mailto:obchod@r-comp.sk" class="hover:text-white">obchod@r-comp.sk</a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- 3. stĺpec: otváracie hodiny.
+             justify-between = deň je vľavo a čas úplne vpravo v tom istom riadku. -->
+        <div>
+            <h3 class="mb-4 text-sm font-semibold uppercase tracking-wider text-white">Otváracie hodiny</h3>
+            <ul class="space-y-2 text-sm">
+                <li class="flex justify-between border-b border-slate-800 pb-2"><span>Pondelok – Piatok</span><span class="text-white">9:00 – 17:00</span></li>
+                <li class="flex justify-between border-b border-slate-800 pb-2"><span>Sobota</span><span class="text-white">9:00 – 12:00</span></li>
+                <li class="flex justify-between"><span>Nedeľa</span><span class="text-slate-500">zatvorené</span></li>
+            </ul>
+            <p class="mt-3 text-xs text-slate-500">obedňajšia prestávka 12:00 – 12:30</p>
+        </div>
+
+        <!-- 4. stĺpec: odkazy na informácie a dokumenty -->
+        <div>
+            <h3 class="mb-4 text-sm font-semibold uppercase tracking-wider text-white">Informácie</h3>
+            <ul class="space-y-2 text-sm">
+                <li><a href="informacie.html#vernostny" class="hover:text-sky-400">Vernostný program</a></li>
+                <li><a href="pomoc.html#doinstalacny" class="hover:text-sky-400">Doinštalačný balík</a></li>
+                <li><a href="pomoc.html#na-dialku" class="hover:text-sky-400">Pomoc na diaľku</a></li>
+                <li><a href="informacie.html#vop" class="hover:text-sky-400">Všeobecné obchodné podmienky</a></li>
+                <li><a href="informacie.html#reklamacie" class="hover:text-sky-400">Reklamačný poriadok</a></li>
+                <li><a href="informacie.html#osobne-udaje" class="hover:text-sky-400">Ochrana osobných údajov</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- SPODNÝ RIADOK: copyright vľavo, tlačidlo "Hore" vpravo.
+         href="#zaciatok" = skočí na element s id="zaciatok" (body), teda na začiatok stránky.
+         rounded-full + border = tlačidlo má tvar zaobleného obdĺžnika s okrajom. -->
+    <div class="border-t border-slate-800">
+        <div class="max-w-6xl mx-auto px-4 py-5 flex flex-wrap items-center justify-between gap-3 text-sm text-slate-500">
+            <span>Copyright © 2022 R-COMP s.r.o.</span>
+            <a href="#zaciatok" class="rounded-full border border-slate-700 px-4 py-1.5 text-slate-300 hover:border-sky-500 hover:text-white">Hore ↑</a>
+        </div>
+    </div>
+</footer>
+
+<!-- SPODNÁ LIŠTA: modrý pás so 4 odkazmi, ktorý je vždy prilepený na spodku okna, aj keď scrolluješ.
+     fixed bottom-0 left-0 right-0 = pripne lištu k spodnému okraju okna cez celú šírku.
+     z-20 = lišta je "navrchu", teda nad ostatným obsahom.
+     grid-cols-4 = 4 rovnako široké stĺpce. -->
+<div class="fixed bottom-0 left-0 right-0 z-20 bg-sky-600 text-white">
+    <div class="max-w-6xl mx-auto grid grid-cols-4 text-center text-xs font-semibold sm:text-sm">
+        <a href="kontakty.html" class="px-1 py-3 leading-tight hover:bg-sky-700">kontakt</a>
+        <a href="obchod.html" class="px-1 py-3 leading-tight hover:bg-sky-700">tovar na predajni</a>
+        <a href="obchod.html#rezervacia" class="px-1 py-3 leading-tight hover:bg-sky-700">rezervuj si tovar</a>
+        <a href="#novinky" class="px-1 py-3 leading-tight hover:bg-sky-700">novinky na e-mail</a>
+    </div>
+</div>
+
+</body>
+</html>

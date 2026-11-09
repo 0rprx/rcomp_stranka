@@ -1,0 +1,31 @@
+/* PLYNULÉ POSÚVANIE
+   Keď klikneš na odkaz, ktorý skáče na časť stránky (napr. #letaky alebo #zaciatok),
+   stránka sa k nej plynule "dokĺže" namiesto toho, aby tam naraz skočila. */
+html {
+    scroll-behavior: smooth;
+}
+
+/* ROZBAĽOVACIE MENU (dropdown) – bez JavaScriptu
+   Podmenu (.submenu) je normálne skryté (display: none).
+   Keď je myš nad položkou s triedou .dropdown (:hover), podmenu sa zobrazí (display: block).
+   :focus-within = to isté, keď na položku prejdeš klávesom Tab alebo na ňu ťukneš na mobile. */
+.submenu {
+    display: none;
+}
+
+.dropdown:hover .submenu,
+.dropdown:focus-within .submenu {
+    display: block;
+}
+
+/* ŠÍPKA PRI POLOŽKE S PODMENU
+   transition = zmena sa neudeje naraz, ale plynulo počas 0,2 sekundy.
+   Keď sa podmenu otvorí, šípka sa otočí o 90 stupňov a ukazuje dole. */
+.dropdown .sipka {
+    transition: transform 0.2s;
+}
+
+.dropdown:hover .sipka,
+.dropdown:focus-within .sipka {
+    transform: rotate(90deg);
+}
